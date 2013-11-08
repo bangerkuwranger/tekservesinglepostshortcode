@@ -3,7 +3,7 @@
  * Plugin Name: Tekserve Single Post Shortcode
  * Plugin URI: https://github.com/bangerkuwranger
  * Description: Wordpress plugin to create a shortcode for showing the title, post info, excerpt, and thumbnail for a single post.
- * Version: 1.0
+ * Version: 1.1
  * Author: Chad A. Carino
  * Author URI: http://www.chadacarino.com
  * License: MIT
@@ -19,12 +19,12 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// shortcode to display a single post
+/** shortcode to display a single post */
 
-// Add Shortcode
+// add shortcode
 function tekserve_single_post( $atts ) {
 
-	// Attributes
+	// attributes
 	extract( shortcode_atts(
 		array(
 			'id' => '',
@@ -32,10 +32,11 @@ function tekserve_single_post( $atts ) {
 		), $atts )
 	);
 
-	// Code
+	// display code
 	$title = '<h2 class="tekserve-single-post-title">' . get_the_title( $id ) . '</h2>';
 	$authorid = get_post_field( 'post_author', $id );
 	$author = get_the_author_meta( 'display_name', $authorid );
+	// php process date to pretty format
 	$datestr = get_post_field( 'post_date', $id );
 	$date = DateTime::createFromFormat('Y-m-d H:i:s', $datestr);
 	$date = $date->format('D, M j, Y');
@@ -43,6 +44,7 @@ function tekserve_single_post( $atts ) {
 	$excerpt = '<div id="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
 	$meta = '<div class="tekserve-single-post-meta">' . $date . ' by ' . $author . '</div>';
 	$thumb = get_the_post_thumbnail($id, array(200,200));
+	// show or hide thumb based on attr
 	if($showimage == "show") {
 		return '<div id="single-post-' . $id . '" class="tekserve-single-post"> <a href="' . get_permalink( $id ) . '">' . $thumb . $title . $meta . $excerpt . '</a></div>';
 	}
@@ -51,3 +53,87 @@ function tekserve_single_post( $atts ) {
 	}
 }
 add_shortcode( 'single_post', 'tekserve_single_post' );
+
+/** widget to display a single post */
+
+class Tekserve_Single_Post_Widget extends WP_Widget {
+
+	public function __construct() {
+		// widget actual processes
+		parent::__construct(
+			'tekserve_single_post_widget', // Base ID
+			__('Tekserve Single Post Widget', 'text_domain'), // Name
+			array( 'description' => __( 'Display a single post preview based on post id', 'text_domain' ), ) // Args
+		);
+	}
+
+	public function widget( $args, $instance ) {
+		extract( $args );
+		// these are the widget options
+		$id = $instance['id'];
+		$showimage = $instance['showimage'];
+		echo $before_widget;
+		// Display the widget
+		// check if id is set
+		if( $id ) {
+			echo '<div id="single-post-' . $id . '" class="tekserve-single-post"> <a href="' . get_permalink( $id ) . '">';
+			// check if showimage is checked, show image if so
+			if( $showimage AND $showimage == '1' ) {
+				echo get_the_post_thumbnail( $id, array(200,200) );
+			}
+			echo '<h2 class="tekserve-single-post-title">' . get_the_title( $id ) . '</h2>';
+			//php process author name
+			$author = get_post_field( 'post_author', $id );
+			$author = get_the_author_meta( 'display_name', $author );
+			// php process date to pretty format
+			$datestr = get_post_field( 'post_date', $id );
+			$date = DateTime::createFromFormat('Y-m-d H:i:s', $datestr);
+			$date = $date->format('D, M j, Y');
+			//concat meta
+			$meta = '<div class="tekserve-single-post-meta">' . $date . ' by ' . $author . '</div>';
+			echo $meta;
+			//process excerpt
+			$excerpt = substr(get_post_field( 'post_content', $id ), 0, 90);
+			echo '<div id="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
+			echo '</a></div>';
+		}
+		echo $after_widget;
+	}
+
+ 	public function form( $instance ) {
+		// outputs the options form on admin
+		
+		// check values
+		if( $instance) {
+			 $id = esc_attr($instance['id']);
+			 $showimage = esc_textarea($instance['showimage']);
+		} else {
+			 $id = '';
+			 $showimage = '';
+		}
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id('id'); ?>"><?php _e('Post ID:', 'wp_widget_plugin'); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id('id'); ?>" name="<?php echo $this->get_field_name('id'); ?>" type="text" value="<?php echo $id; ?>" />
+		</p>
+		<p>
+			<input id="<?php echo $this->get_field_id('showimage'); ?>" name="<?php echo $this->get_field_name('showimage'); ?>" type="checkbox" value="1" <?php checked( '1', $showimage ); ?> />
+			<label for="<?php echo $this->get_field_id('checkbox'); ?>"><?php _e('Show Image?', 'wp_widget_plugin'); ?></label>
+		</p>
+		<?php
+	}
+
+
+	public function update( $new_instance, $old_instance ) {
+		// processes widget options to be saved
+		$instance = $old_instance;
+    	// Fields
+    	$instance['id'] = strip_tags($new_instance['id']);
+    	$instance['showimage'] = strip_tags($new_instance['showimage']);
+    	return $instance;
+	}
+}
+
+add_action( 'widgets_init', function(){
+     register_widget( 'Tekserve_Single_Post_Widget' );
+});
