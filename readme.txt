@@ -1,20 +1,11 @@
-Tekserve Single Post Shortcode
-=====================
-
+=== Tekserve Single Post Shortcode ===
 Contributors: bangerkuwranger
-
 Donate link: http://www.chadacarino.com/burnallmoney.html
-
 Tags: single post, preview, excerpt, thumbnail, link, shortcode, content
-
 Requires at least: 3.1
-
 Tested up to: 3.7.1
-
 Stable tag: 1.0
-
 License: MIT
-
 License URI: http://www.chadacarino.com/license-mit.html
 
 Wordpress plugin to create a shortcode for showing the title, post info, excerpt, and thumbnail for a single post.
@@ -95,6 +86,10 @@ Post Content
 </tr>
 </tbody>
 </table>
+
+== Screenshots ==
+
+Not much to see; the formatting of the excerpt will change based on your css.
 
 == Changelog ==
 
