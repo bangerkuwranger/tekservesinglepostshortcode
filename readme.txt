@@ -37,60 +37,27 @@ It's pretty easy; just add css for the output classes and ids in your style.css 
 
 Here's a listing of targets to style the output:
 
-<table>
-<thead>
-<tr>
-<th style="padding: 10px">
-Output to Style
-</th>
-<th style="padding: 10px">
-CSS target
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="padding: 10px">
-Single Post Container
-</td>
-<td style="padding: 10px">
-.tekserve-single-post -or- #single-post-<i>id</i> (id is numerical post id)
-</td>
-</tr>
-<tr>
-<td style="padding: 10px">
-Featured Image
-</td>
-<td style="padding: 10px">
-.tekserve-single-post a img
-</td>
-</tr>
-<tr>
-<td style="padding: 10px">
-Title
-</td>
-<td style="padding: 10px">
-.tekserve-single-post .tekserve-single-post-title
-</td>
-</tr>
-<tr>
-<td style="padding: 10px">
-Date and Author
-</td>
-<td style="padding: 10px">
-.tekserve-single-post .tekserve-single-post-meta
-</td>
-</tr>
-<tr>
-<td style="padding: 10px">
-Post Content
-</td>
-<td style="padding: 10px">
-.tekserve-single-post .tekserve-single-post-excerpt
-</td>
-</tr>
-</tbody>
-</table>
+
+*Output to Style*		*CSS target*
+
+Single Post Container		.tekserve-single-post -or- #single-post-$$ ( $$ is numerical post id)
+
+Featured Image			.tekserve-single-post a img
+
+Title				.tekserve-single-post .tekserve-single-post-title
+
+Date and Author			.tekserve-single-post .tekserve-single-post-meta
+
+Post Content			.tekserve-single-post .tekserve-single-post-excerpt
+
+= Where does the plugin get its output? =
+
+From the post, of course! Here are the specifics:
+
+* Image - Post Featured Image / Thumbnail
+* Title - Post Title
+* Meta - Post Date and Post Author
+* Excerpt - Post excerpt, if it exists. If not, first 90 characters of content, sans html tags
 
 == Screenshots ==
 
@@ -101,6 +68,7 @@ Not much to see; the formatting of the excerpt will change based on your css.
 = 1.3 =
 
 * filtered excerpt html tags
+* added support for excerpt field
 
 = 1.2 =
 

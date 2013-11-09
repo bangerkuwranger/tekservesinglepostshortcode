@@ -99,11 +99,21 @@ Post Content
 </tbody>
 </table>
 
+= Where does the plugin get its output? =
+
+From the post, of course! Here are the specifics:
+
+* Image - Post Featured Image / Thumbnail
+* Title - Post Title
+* Meta - Post Date and Post Author
+* Excerpt - Post excerpt, if it exists. If not, first 90 characters of content, sans html tags
+
 == Changelog ==
 
 = 1.3 =
 
 * filtered excerpt html tags
+* added support for excerpt field
 
 = 1.2 =
 

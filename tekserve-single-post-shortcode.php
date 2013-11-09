@@ -43,6 +43,10 @@ function tekserve_single_post( $atts ) {
 	$date = $date->format('D, M j, Y');
 	$excerpt = substr(get_post_field( 'post_content', $id, 'raw' ), 0, 90);
 	$excerpt = '<div id="tekserve-single-post-excerpt">' . strip_tags($excerpt) . '...CONTINUE...</div>';
+	if( get_post_field( 'post_excerpt', $id ) != '' ) {
+		$excerpt = get_post_field( 'post_excerpt', $id );
+		$excerpt = '<div id="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
+	}
 	$meta = '<div class="tekserve-single-post-meta">' . $date . ' by ' . $author . '</div>';
 	$thumb = get_the_post_thumbnail($id, array(200,200));
 	// show or hide thumb based on attr
@@ -95,6 +99,9 @@ class Tekserve_Single_Post_Widget extends WP_Widget {
 			echo $meta;
 			//process excerpt
 			$excerpt = substr(get_post_field( 'post_content', $id ), 0, 90);
+			if( get_post_field( 'post_excerpt', $id ) != '' ) {
+				$excerpt = get_post_field( 'post_excerpt', $id );
+			}
 			echo '<div id="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
 			echo '</a></div>';
 		}
