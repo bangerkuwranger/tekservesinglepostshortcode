@@ -4,7 +4,7 @@ Donate link: http://www.chadacarino.com/burnallmoney.html
 Tags: single post, preview, excerpt, thumbnail, link, shortcode, content, widget
 Requires at least: 3.1
 Tested up to: 3.7.1
-Stable tag: 1.2
+Stable tag: 1.3
 License: MIT
 License URI: http://www.chadacarino.com/license-mit.html
 
@@ -98,6 +98,14 @@ Not much to see; the formatting of the excerpt will change based on your css.
 
 == Changelog ==
 
+= 1.3 =
+
+* filtered excerpt html tags
+
+= 1.2 =
+
+* updated file permissions
+
 = 1.1 =
 
 * added widget
@@ -108,6 +116,6 @@ Not much to see; the formatting of the excerpt will change based on your css.
 
 == Upgrade Notice ==
 
-= 1.1 =
+= 1.3 =
 
 basic functionality confirmed.

@@ -3,7 +3,7 @@
  * Plugin Name: Tekserve Single Post Shortcode
  * Plugin URI: https://github.com/bangerkuwranger
  * Description: Wordpress plugin to create a shortcode for showing the title, post info, excerpt, and thumbnail for a single post.
- * Version: 1.2
+ * Version: 1.3
  * Author: Chad A. Carino
  * Author URI: http://www.chadacarino.com
  * License: MIT
@@ -41,8 +41,8 @@ function tekserve_single_post( $atts ) {
 	$datestr = get_post_field( 'post_date', $id );
 	$date = DateTime::createFromFormat('Y-m-d H:i:s', $datestr);
 	$date = $date->format('D, M j, Y');
-	$excerpt = substr(get_post_field( 'post_content', $id ), 0, 90);
-	$excerpt = '<div id="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
+	$excerpt = substr(get_post_field( 'post_content', $id, 'raw' ), 0, 90);
+	$excerpt = '<div id="tekserve-single-post-excerpt">' . strip_tags($excerpt) . '...CONTINUE...</div>';
 	$meta = '<div class="tekserve-single-post-meta">' . $date . ' by ' . $author . '</div>';
 	$thumb = get_the_post_thumbnail($id, array(200,200));
 	// show or hide thumb based on attr
