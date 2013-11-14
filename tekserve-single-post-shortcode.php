@@ -45,7 +45,7 @@ function tekserve_single_post( $atts ) {
 	$excerpt = '<div id="tekserve-single-post-excerpt">' . strip_tags($excerpt) . '...CONTINUE...</div>';
 	if( get_post_field( 'post_excerpt', $id ) != '' ) {
 		$excerpt = get_post_field( 'post_excerpt', $id );
-		$excerpt = '<div id="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
+		$excerpt = '<div class="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
 	}
 	$meta = '<div class="tekserve-single-post-meta">' . $date . ' by ' . $author . '</div>';
 	$thumb = get_the_post_thumbnail($id, array(200,200));
@@ -102,7 +102,7 @@ class Tekserve_Single_Post_Widget extends WP_Widget {
 			if( get_post_field( 'post_excerpt', $id ) != '' ) {
 				$excerpt = get_post_field( 'post_excerpt', $id );
 			}
-			echo '<div id="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
+			echo '<div class="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
 			echo '</a></div>';
 		}
 		echo $after_widget;
