@@ -3,7 +3,7 @@
  * Plugin Name: Tekserve Single Post Shortcode
  * Plugin URI: https://github.com/bangerkuwranger
  * Description: Wordpress plugin to create a shortcode for showing the title, post info, excerpt, and thumbnail for a single post.
- * Version: 1.3
+ * Version: 1.4
  * Author: Chad A. Carino
  * Author URI: http://www.chadacarino.com
  * License: MIT
@@ -30,6 +30,7 @@ function tekserve_single_post( $atts ) {
 		array(
 			'id' => '',
 			'showimage' => '',
+			'buttontext' => '',
 		), $atts )
 	);
 
@@ -42,13 +43,17 @@ function tekserve_single_post( $atts ) {
 	$date = DateTime::createFromFormat('Y-m-d H:i:s', $datestr);
 	$date = $date->format('D, M j, Y');
 	$excerpt = substr(get_post_field( 'post_content', $id, 'raw' ), 0, 90);
-	$excerpt = '<div id="tekserve-single-post-excerpt">' . strip_tags($excerpt) . '...CONTINUE...</div>';
+	$excerpt = '<div id="tekserve-single-post-excerpt">' . strip_tags($excerpt) . '...</div>';
 	if( get_post_field( 'post_excerpt', $id ) != '' ) {
 		$excerpt = get_post_field( 'post_excerpt', $id );
-		$excerpt = '<div class="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
+		$excerpt = '<div class="tekserve-single-post-excerpt">' . rtrim($excerpt) . '...</div>';
 	}
 	$meta = '<div class="tekserve-single-post-meta">' . $date . ' by ' . $author . '</div>';
 	$thumb = get_the_post_thumbnail($id, array(200,200));
+	//show continue button if selected with selected text
+	if($buttontext) {
+		$excerpt = $excerpt . '<div class="tekserve-single-post-button">' . $buttontext . '</div>';
+	}
 	// show or hide thumb based on attr
 	if($showimage == "show") {
 		return '<div id="single-post-' . $id . '" class="tekserve-single-post"> <a href="' . get_permalink( $id ) . '">' . $thumb . $title . $meta . $excerpt . '</a></div>';
@@ -77,15 +82,16 @@ class Tekserve_Single_Post_Widget extends WP_Widget {
 		// these are the widget options
 		$id = $instance['id'];
 		$showimage = $instance['showimage'];
+		$buttontext = $instance['buttontext'];
 		echo $before_widget;
 		// Display the widget
 		// check if id is set
 		if( $id ) {
 			echo '<div id="single-post-' . $id . '" class="tekserve-single-post"> <a href="' . get_permalink( $id ) . '">';
 			// check if showimage is checked, show image if so
-			if( $showimage AND $showimage == '1' ) {
+			//if( $showimage AND $showimage == '1' ) {
 				echo get_the_post_thumbnail( $id, array(200,200) );
-			}
+			//}
 			echo '<h2 class="tekserve-single-post-title">' . get_the_title( $id ) . '</h2>';
 			//php process author name
 			$author = get_post_field( 'post_author', $id );
@@ -102,7 +108,12 @@ class Tekserve_Single_Post_Widget extends WP_Widget {
 			if( get_post_field( 'post_excerpt', $id ) != '' ) {
 				$excerpt = get_post_field( 'post_excerpt', $id );
 			}
-			echo '<div class="tekserve-single-post-excerpt">' . $excerpt . '...CONTINUE...</div>';
+			$excerpt = '<div class="tekserve-single-post-excerpt">' . rtrim($excerpt) . '...</div>';
+			echo $excerpt;
+			if( $buttontext ) {
+				$buttontext = '<div class="tekserve-single-post-button">' . $buttontext . '</div>';
+				echo $buttontext;
+			}
 			echo '</a></div>';
 		}
 		echo $after_widget;
@@ -115,9 +126,11 @@ class Tekserve_Single_Post_Widget extends WP_Widget {
 		if( $instance) {
 			 $id = esc_attr($instance['id']);
 			 $showimage = esc_textarea($instance['showimage']);
+			 $buttontext = esc_textarea($instance['buttontext']);
 		} else {
 			 $id = '';
 			 $showimage = '';
+			 $buttontext = '';
 		}
 		?>
 		<p>
@@ -126,7 +139,11 @@ class Tekserve_Single_Post_Widget extends WP_Widget {
 		</p>
 		<p>
 			<input id="<?php echo $this->get_field_id('showimage'); ?>" name="<?php echo $this->get_field_name('showimage'); ?>" type="checkbox" value="1" <?php checked( '1', $showimage ); ?> />
-			<label for="<?php echo $this->get_field_id('checkbox'); ?>"><?php _e('Show Image?', 'wp_widget_plugin'); ?></label>
+			<label for="<?php echo $this->get_field_id('showimage'); ?>"><?php _e('Show Image?', 'wp_widget_plugin'); ?></label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('buttontext'); ?>"><?php _e('Text for Button (leave blank for none):', 'wp_widget_plugin'); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id('buttontext'); ?>" name="<?php echo $this->get_field_name('buttontext'); ?>" type="text" value="<?php echo $buttontext; ?>" />
 		</p>
 		<?php
 	}
@@ -138,6 +155,7 @@ class Tekserve_Single_Post_Widget extends WP_Widget {
     	// Fields
     	$instance['id'] = strip_tags($new_instance['id']);
     	$instance['showimage'] = strip_tags($new_instance['showimage']);
+    	$instance['buttontext'] = strip_tags($new_instance['buttontext']);
     	return $instance;
 	}
 }
