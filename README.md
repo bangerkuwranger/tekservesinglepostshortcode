@@ -9,9 +9,9 @@ Tags: single post, preview, excerpt, thumbnail, link, shortcode, content, widget
 
 Requires at least: 3.1
 
-Tested up to: 3.8
+Tested up to: 4.1
 
-Stable tag: 1.4
+Stable tag: 1.4.1
 
 License: MIT
 

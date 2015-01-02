@@ -3,8 +3,8 @@ Contributors: bangerkuwranger
 Donate link: http://www.chadacarino.com/burnallmoney.html
 Tags: single post, preview, excerpt, thumbnail, link, shortcode, content, widget
 Requires at least: 3.1
-Tested up to: 3.8
-Stable tag: 1.4
+Tested up to: 4.1
+Stable tag: 1.4.1
 License: MIT
 License URI: http://www.chadacarino.com/license-mit.html
 
